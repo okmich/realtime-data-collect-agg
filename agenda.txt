@@ -1,0 +1,26 @@
+Day One
+===================
+Introduction to Spark Streaming
+Geo-Life Trajectories
+Dataset
+Introduction to architecture
+Dashboard preview
+Setup
+	Hadoop
+	Zookeeper
+	HBase
+	Kafka
+Data streaming simulation demo
+Spark streaming
+Spark-HBase integration
+
+
+
+Day Two
+====================
+1. Analytics implementation
+	-	Key-value store db integration
+	-	Spark SQL consideration
+2. End-to-end demonstration
+3. More advanced solutions currently 
+4. Questions 

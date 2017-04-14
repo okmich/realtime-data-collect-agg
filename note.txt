@@ -1,0 +1,12 @@
+
+create 'mvment', 'main'
+
+
+#running the client dashboard
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.dashboard.ClientDashboard
+
+#running the create dataset simulation tool
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger
+
+#running the create dataset streaming simulation 
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.RealTimeDeviceClientSimulator
