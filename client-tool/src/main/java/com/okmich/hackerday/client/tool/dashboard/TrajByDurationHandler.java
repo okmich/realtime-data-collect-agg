@@ -13,13 +13,14 @@ import java.util.Map;
  */
 public class TrajByDurationHandler extends AbstractHandler {
 
-    
+    private static final String SQL_QUERY = "select \"trajid\", sum(\"tdiffs\") duration from \"mvment_by_traj\" group by \"trajId\"";
+
     /**
      *
      * @param schema
      */
     public TrajByDurationHandler(Map<String, String> schema) {
-        super(schema);
+        super(schema, SQL_QUERY);
     }
 
     @Override

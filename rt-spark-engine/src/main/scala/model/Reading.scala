@@ -5,11 +5,11 @@ import java.util.Date
 import java.text.SimpleDateFormat
 
 
-case class Reading (val userId : String, val trajectoryId: String, val lat: Float, val lon : Float, val alt: Float, val date : String, val time : String) extends java.io.Serializable {
+case class Reading (val userId : String, val trajectoryId: String, val lat: Float, val lon : Float, val alt: Int, val date : String, val time : String) extends java.io.Serializable {
 
-	private val ts = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss").parse(date + "," + time).getTime
+	val ts = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss").parse(date + "," + time).getTime
 
 	def toTuple  = {
-		(userId + "|" + ts.toString, trajectoryId, lat, lon, alt, ts, userId)
+		(userId + "|" + (Long.MaxValue - ts).toString, trajectoryId, lat, lon, alt, ts, userId)
 	}
 }

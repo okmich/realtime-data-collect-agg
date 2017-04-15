@@ -11,6 +11,9 @@ System components
 -	Dashboard
 
 
+# create topic for the aggregated result
+kafka-topics.sh --zookeeper 192.168.8.120:2181 --topic result-aggregation-topic --create --partitions 1 --replication-factor 1
+kafka-topics.sh --zookeeper 192.168.8.120:2181 --topic raw-gpstrajectory-data-topic --create --partitions 1 --replication-factor 1
 
 #to list the topics in a kafka server 
 kafka-topics.sh --list --zookeeper 192.168.8.120:2181
@@ -50,3 +53,25 @@ java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.Fi
 
 #running the create dataset streaming simulation 
 java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.RealTimeDeviceClientSimulator "F:\data_dump\Geolife Trajectories 1.3\Data" 192.168.8.120:9092 foo
+
+
+
+#apache phoenix view creation command
+create view "mvment_by_traj" (ROWKEY VARCHAR PRIMARY KEY, "main"."plat" FLOAT, "main"."plon" FLOAT, "main"."lon" FLOAT, "main"."lat" FLOAT, "main"."dist" FLOAT, "main"."pts" BIGINT, "main"."ts" BIGINT, "main"."tdiffs" INTEGER, "main"."trajid" VARCHAR);
+
+create view "mvment" (ROWKEY VARCHAR PRIMARY KEY, "main"."trajId" VARCHAR, "main"."lat" FLOAT, "main"."lon" FLOAT, "main"."alt" INTEGER, "main"."ts" BIGINT, "main"."userId" VARCHAR);
+
+
+-- trajectories by distance
+select "trajid", sum("dist") distance from "mvment_by_traj" group by "trajid";
+
+
+-- trajectories by duration
+select "trajid", sum("tdiffs") duration from "mvment_by_traj" group by "trajId";
+
+
+-- user by trajectories
+select "userId", count(distinct "trajId") from "mvment" group by "trajId";
+
+-- user by collection period
+select "userId", min("ts") mints, max("ts") maxts from "mvment" group by "trajId";

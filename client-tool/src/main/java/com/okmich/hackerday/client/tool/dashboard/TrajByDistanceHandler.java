@@ -13,12 +13,14 @@ import java.util.Map;
  */
 public class TrajByDistanceHandler extends AbstractHandler {
 
+    private static final String SQL_QUERY = "select \"trajid\", sum(\"dist\") distance from \"mvment_by_traj\" group by \"trajid\"";
+
     /**
      *
      * @param schema
      */
     public TrajByDistanceHandler(Map<String, String> schema) {
-        super(schema);
+        super(schema, SQL_QUERY);
     }
 
     @Override

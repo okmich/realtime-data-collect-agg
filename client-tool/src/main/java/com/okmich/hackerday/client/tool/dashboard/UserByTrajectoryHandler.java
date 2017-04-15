@@ -13,12 +13,14 @@ import java.util.Map;
  */
 public class UserByTrajectoryHandler extends AbstractHandler {
 
+    private static final String SQL_QUERY = "select \"userId\", count(distinct \"trajId\") from \"mvment\" group by \"trajId\"";
+
     /**
      *
      * @param schema
      */
     public UserByTrajectoryHandler(Map<String, String> schema) {
-        super(schema);
+        super(schema, SQL_QUERY);
     }
 
     @Override
