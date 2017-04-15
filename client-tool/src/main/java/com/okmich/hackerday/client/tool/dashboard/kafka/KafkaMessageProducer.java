@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.okmich.hackerday.client.tool.kafka;
+package com.okmich.hackerday.client.tool.dashboard.kafka;
 
 import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;

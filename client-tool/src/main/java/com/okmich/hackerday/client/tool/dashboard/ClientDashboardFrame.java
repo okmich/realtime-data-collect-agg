@@ -5,9 +5,10 @@
  */
 package com.okmich.hackerday.client.tool.dashboard;
 
+import static com.okmich.hackerday.client.tool.dashboard.Handler.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.Arrays;
+import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.WindowConstants;
@@ -16,29 +17,23 @@ import javax.swing.WindowConstants;
  *
  * @author m.enudi
  */
-public class ClientDashboard extends javax.swing.JFrame {
+public class ClientDashboardFrame extends javax.swing.JFrame {
 
     private ReportItemPanel panelContext;
 
     /**
      * Creates new form ClientDashboard
+     *
+     * @param itemPanelMap
      */
-    public ClientDashboard() {
-        trajByDistancePanel = new ReportItemPanel("Distribution of trajectories by distance", this,
-                new TrajByDistanceHandler(Arrays.asList("< 5km", "5km ~ 20km", "20km ~ 100km", "≥ 100km")));
-        trajByDurationPanel = new ReportItemPanel("Distribution of trajectories by effective duration", this,
-                new TrajByDistanceHandler(Arrays.asList("< 1h", "1h ~ 6h", "6h ~ 12h", "≥ 12h")));
-        userByPeriodPanel = new ReportItemPanel("Distribution of users by data collection period", this,
-                new UserByPeriodHandler(Arrays.asList("< 1week", "1week ~ 1month", "1month ~ 1year", "≥1year")));
-        userByTrajPanel = new ReportItemPanel("Distribution of users by trajectories", this,
-                new TrajByDistanceHandler(Arrays.asList("< 10", "10 ~ 50", "50 ~ 100", "≥ 100")));
+    public ClientDashboardFrame(Map<String, ReportItemPanel> itemPanelMap) {
 
         initComponents();
 
-        getContentPane().add(trajByDistancePanel);
-        getContentPane().add(trajByDurationPanel);
-        getContentPane().add(userByPeriodPanel);
-        getContentPane().add(userByTrajPanel);
+        getContentPane().add(itemPanelMap.get(TRAJ_DISTANCE_KEY));
+        getContentPane().add(itemPanelMap.get(TRAJ_DURATION_KEY));
+        getContentPane().add(itemPanelMap.get(USER_PERIOD_KEY));
+        getContentPane().add(itemPanelMap.get(USER_TRAJ_KEY));
     }
 
     /**
@@ -68,20 +63,6 @@ public class ClientDashboard extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new ClientDashboard().setVisible(true);
-        });
-    }
-
-    private final ReportItemPanel trajByDistancePanel;
-    private final ReportItemPanel trajByDurationPanel;
-    private final ReportItemPanel userByPeriodPanel;
-    private final ReportItemPanel userByTrajPanel;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JMenu jMenu1;
     private JMenuBar jMenuBar1;

@@ -10,9 +10,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -26,26 +26,21 @@ import org.jfree.data.general.DefaultPieDataset;
  *
  * @author m.enudi
  */
-public final class ReportItemPanel extends javax.swing.JPanel {
-//    private JPanel containPanel;
+public final class ReportItemPanel extends JPanel implements ReportItem {
 
-    private JButton viewButton;
-
-    private Handler handler;
+    private final Handler handler;
     private final String title;
     private DefaultPieDataset pieDataset;
 
-    private final ClientDashboard parentFrame;
     private JPanel chartPanel;
 
     /**
      * Creates new form ReportItemPanel
      *
      * @param title
-     * @param parent
      * @param handler
      */
-    public ReportItemPanel(String title, ClientDashboard parent, Handler handler) {
+    public ReportItemPanel(String title, Handler handler) {
         this.handler = handler;
         this.handler.registerUI(this);
 
@@ -58,8 +53,6 @@ public final class ReportItemPanel extends javax.swing.JPanel {
 //        buildContainerPanel();
 //        add(containPanel, BorderLayout.NORTH);
         add(createChartPanel(), BorderLayout.CENTER);
-
-        this.parentFrame = parent;
     }
 
     /**
@@ -83,22 +76,34 @@ public final class ReportItemPanel extends javax.swing.JPanel {
     private DefaultPieDataset getChartDataset() {
         if (this.pieDataset == null) {
             pieDataset = new DefaultPieDataset();
-            Map<String, Double> model = this.handler.getModel();
-            for (String key : model.keySet()) {
-                pieDataset.setValue(key, model.get(key));
-            }
+            Map<String, String> model = this.handler.getModel();
+            model.keySet().stream().forEach((key) -> {
+                pieDataset.setValue(model.get(key), 0d);
+            });
         }
         return pieDataset;
     }
 
-//    public void buildContainerPanel() {
-//        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-//        viewButton = new JButton("View Details");
-//        buttonPanel.add(viewButton);
-//
-//        containPanel.add(createChartPanel(), BorderLayout.CENTER);
-//        //containPanel.add(buttonPanel, BorderLayout.SOUTH);
-//    }
+    /**
+     *
+     * @param items
+     */
+    @Override
+    public void reportItemModel(Map<String, Double> items) {
+        //two strategies
+        items.keySet().stream().forEach((key) -> {
+            pieDataset.setValue(items.get(key), 0d);
+        });
+    }
+
+    public ClientDashboardFrame getClientDashboardFrame() {
+        //crazy code - calling for nullpointer
+        return (ClientDashboardFrame) getParent() //JPanel
+                .getParent() //JLayeredPanel
+                .getParent() //JRootPanel
+                .getParent(); //JFrame
+    }
+
     /**
      *
      * @return A panel.
@@ -152,7 +157,8 @@ public final class ReportItemPanel extends javax.swing.JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            parentFrame.setPanelContext(source);
+
+            getClientDashboardFrame().setPanelContext(source);
             source.onMouseClick();
         }
 
@@ -165,6 +171,5 @@ public final class ReportItemPanel extends javax.swing.JPanel {
         public void mouseExited(MouseEvent e) {
             source.onMouseExit();
         }
-
     }
 }

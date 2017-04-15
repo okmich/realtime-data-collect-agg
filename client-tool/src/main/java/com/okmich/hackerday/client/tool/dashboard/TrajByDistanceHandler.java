@@ -5,39 +5,24 @@
  */
 package com.okmich.hackerday.client.tool.dashboard;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author m.enudi
  */
-public class TrajByDistanceHandler implements Handler {
+public class TrajByDistanceHandler extends AbstractHandler {
 
-    private ReportItemPanel panel;
-    private final Map<String, Double> model;
-
-    public TrajByDistanceHandler(List<String> keys) {
-        model = new LinkedHashMap<>();
-        for (String key : keys) {
-            model.put(key, 23d);
-        }
+    /**
+     *
+     * @param schema
+     */
+    public TrajByDistanceHandler(Map<String, String> schema) {
+        super(schema);
     }
 
     @Override
-    public void handle() {
+    public void handle(String msg) {
 
     }
-
-    @Override
-    public void registerUI(ReportItemPanel reportItemPanel) {
-        this.panel = reportItemPanel;
-    }
-
-    @Override
-    public Map<String, Double> getModel() {
-        return this.model;
-    }
-
 }

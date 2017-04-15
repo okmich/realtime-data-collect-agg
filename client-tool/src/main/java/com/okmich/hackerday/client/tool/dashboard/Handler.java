@@ -13,10 +13,39 @@ import java.util.Map;
  */
 public interface Handler {
 
-    void handle();
+    /**
+     * TRAJ_DISTANCE_KEY
+     */
+    public static final String TRAJ_DISTANCE_KEY = "traj.dist";
+    /**
+     * TRAJ_DURATION_KEY
+     */
+    public static final String TRAJ_DURATION_KEY = "traj.drtn";
+    /**
+     * USER_TRAJ_KEY
+     */
+    public static final String USER_TRAJ_KEY = "user.traj";
+    /**
+     * USER_PERIOD_KEY
+     */
+    public static final String USER_PERIOD_KEY = "user.prd";
 
-    Map<String, Double> getModel();
+    /**
+     *
+     * @param message
+     */
+    void handle(String message);
 
-    void registerUI(ReportItemPanel panel);
+    /**
+     *
+     * @return
+     */
+    Map<String, String> getModel();
+
+    /**
+     *
+     * @param reportItem
+     */
+    void registerUI(ReportItem reportItem);
 
 }

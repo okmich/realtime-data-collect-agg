@@ -5,7 +5,7 @@
  */
 package com.okmich.hackerday.client.tool;
 
-import com.okmich.hackerday.client.tool.kafka.KafkaMessageProducer;
+import com.okmich.hackerday.client.tool.dashboard.kafka.KafkaMessageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

@@ -5,41 +5,25 @@
  */
 package com.okmich.hackerday.client.tool.dashboard;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  *
  * @author m.enudi
  */
-public class TrajByDurationHandler implements Handler {
+public class TrajByDurationHandler extends AbstractHandler {
 
-    private ReportItemPanel panel;
-    private final Map<String, Double> model;
-
-    public TrajByDurationHandler(List<String> keys) {
-        Random rand = new Random();
-        model = new LinkedHashMap<>();
-        for (String key : keys) {
-            model.put(key, Double.valueOf(rand.nextInt(40)));
-        }
+    
+    /**
+     *
+     * @param schema
+     */
+    public TrajByDurationHandler(Map<String, String> schema) {
+        super(schema);
     }
 
     @Override
-    public void handle() {
+    public void handle(String msg) {
 
     }
-
-    @Override
-    public void registerUI(ReportItemPanel reportItemPanel) {
-        this.panel = reportItemPanel;
-    }
-
-    @Override
-    public Map<String, Double> getModel() {
-        return this.model;
-    }
-
 }
