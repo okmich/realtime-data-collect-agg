@@ -13,5 +13,3 @@ case class Reading (val userId : String, val trajectoryId: String, val lat: Floa
 		(userId + "|" + ts.toString, trajectoryId, lat, lon, alt, ts, userId)
 	}
 }
-
-//val s = "000,20081023025304,39.984702,116.318417,0,492,39744.1201851852,2008-10-23,02:53:04"

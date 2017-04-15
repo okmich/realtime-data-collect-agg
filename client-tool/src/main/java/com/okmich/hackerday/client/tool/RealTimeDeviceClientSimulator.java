@@ -21,7 +21,7 @@ public class RealTimeDeviceClientSimulator {
     private static final Logger LOG = Logger.getLogger(RealTimeDeviceClientSimulator.class.getName());
 
     public static void main(String[] args) {
-        if (args.length < 4) {
+        if (args.length < 3) {
             System.err.println("General argument: <data_dir> <broker_url> <topic>");
             System.exit(-1);
         }

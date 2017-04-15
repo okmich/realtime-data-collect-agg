@@ -18,6 +18,6 @@ class KafkaMessageProducer(val brokers: String, val topic : String) extends java
   	def sendMessage(data : String) : Unit = {
   		val record = new ProducerRecord[String, String](topic, Long.MaxValue.toString, data)
   		kafkaProducer.send(record)
-  		kafkaProducer.flush()
+  		//kafkaProducer.flush()
   	}
 }

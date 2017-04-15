@@ -1,12 +1,52 @@
+System components
+=========================
+-	Kafka 
+-	HBase
+- 	Spark streaming
+	analyitic
+-	KeyValue (Redis)
 
+
+-	Data simulator
+-	Dashboard
+
+
+
+#to list the topics in a kafka server 
+kafka-topics.sh --list --zookeeper 192.168.8.120:2181
+
+# to start a kafka console producer to write to a foo topic
+kafka-console-producer.sh --topic foo --broker-list 192.168.8.120:9092 
+
+
+# to start a kafka consumer to read from foo topic
+kafka-console-consumer.sh --zookeeper 192.168.8.105:2181 --topic foo
+
+# to create the hbase mvment table
 create 'mvment', 'main'
 
 
 #running the client dashboard
 java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.dashboard.ClientDashboard
 
+
 #running the create dataset simulation tool
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 000 024 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 025 049 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 050 074 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 075 099 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 100 124 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 125 149 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 150 174 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 175 181 "F:\data_dump\Geolife Trajectories 1.3\Data"
+
 
 #running the create dataset streaming simulation 
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.RealTimeDeviceClientSimulator
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.RealTimeDeviceClientSimulator "F:\data_dump\Geolife Trajectories 1.3\Data" 192.168.8.120:9092 foo

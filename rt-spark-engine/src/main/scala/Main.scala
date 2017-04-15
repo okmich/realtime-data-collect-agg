@@ -28,16 +28,20 @@ object Main {
 		}
 		
 		val sparkConf = new SparkConf().setAppName("Sensor Data Stream Processor")
+		sparkConf.set("spark.hbase.host", args(3))
+		sparkConf.set("zookeeper.znode.parent", "/hbase")
+
 		val streamingCtx = new StreamingContext(sparkConf, Milliseconds(250))
 
-		val topics = Set("test_topic")
-		val brokers = "192.168.8.120:9092"
+		val topics = Set("foo") // Set(args(0))
+		val brokers = "192.168.8.120:9092" //args(2)
+		val downstreamTopic = Set("bar") // Set(args(1))
+		
 		val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
 		val data = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](streamingCtx, kafkaParams, topics)
 
 		// Get the lines, split them into words, count the words and print
 		data.map(_._2).foreachRDD(processRDD(_))
-		
 
 		// Start the computation
 	    streamingCtx.start()
@@ -55,7 +59,12 @@ object Main {
 	 * @param rdd
 	 */
 	def processRDD(rdd: RDD[String]) : Unit ={
-		rdd foreach ((r: String) => println("======================== " + r)) 
+		//logic begins
+		val readingRDD = rdd.map(createReading(_))
+
+
+		//save to hbase
+		saveReadingToHBase(readingRDD)
 	}
 
 
@@ -79,6 +88,13 @@ object Main {
 		    .toColumns("trajId", "lat", "lon", "alt", "ts", "userId")
 		    .inColumnFamily("main")
 		    .save()
+	}
+
+
+	def createReading(line: String) : Reading = {
+		//val s = "000,20081023025304,39.984702,116.318417,0,492,39744.1201851852,2008-10-23,02:53:04"
+		val parts = line.split(",")
+		Reading(parts(0), parts(1), parts(2).toFloat, parts(3).toFloat, parts(5).toFloat, parts(7), parts(8) )
 	}
 }
 
