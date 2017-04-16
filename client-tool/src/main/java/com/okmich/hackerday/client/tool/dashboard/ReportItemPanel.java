@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -76,9 +76,9 @@ public final class ReportItemPanel extends JPanel implements ReportItem {
     private DefaultPieDataset getChartDataset() {
         if (this.pieDataset == null) {
             pieDataset = new DefaultPieDataset();
-            Map<String, String> model = this.handler.getModel();
-            model.keySet().stream().forEach((key) -> {
-                pieDataset.setValue(model.get(key), 0d);
+            List<String> model = this.handler.getSchema();
+            model.stream().forEach((key) -> {
+                pieDataset.setValue(key, 0d);
             });
         }
         return pieDataset;
@@ -92,7 +92,7 @@ public final class ReportItemPanel extends JPanel implements ReportItem {
     public void reportItemModel(Map<String, Double> items) {
         //two strategies
         items.keySet().stream().forEach((key) -> {
-            pieDataset.setValue(items.get(key), 0d);
+            pieDataset.setValue(key, items.get(key));
         });
     }
 

@@ -9,6 +9,8 @@ import com.okmich.hackerday.client.tool.dashboard.Handler;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -26,6 +28,8 @@ public class KafkaMessageConsumer {
     private final Map<String, Handler> handlerMap;
 
     private static final Logger LOG = Logger.getLogger(KafkaMessageConsumer.class.getName());
+
+    private Executor executor;
 
     /**
      *
@@ -47,6 +51,8 @@ public class KafkaMessageConsumer {
         kafkaConsumer.subscribe(Arrays.asList(topic));
 
         this.handlerMap = ihandlerMap;
+
+        executor = Executors.newFixedThreadPool(2);
     }
 
     /**
@@ -58,21 +64,18 @@ public class KafkaMessageConsumer {
         while (true) {
             ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
             for (ConsumerRecord<String, String> record : records) {
-                System.out.println(">>> " + record.value());
                 parts = record.value().split("=");
-                getHandler(parts[0]).handle(parts[1]);
+                executor.execute(() -> {
+                    handlerMap.keySet().stream().forEach((key) -> {
+                        try {
+                            handlerMap.get(key).handle("");
+                        } catch (Exception ex) {
+                            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+                        }
+                    });
+                });
             }
         }
-
-    }
-
-    /**
-     *
-     * @param key
-     * @return
-     */
-    public Handler getHandler(String key) {
-        return handlerMap.get(key);
     }
 
 //    public static void main(String[] args) {

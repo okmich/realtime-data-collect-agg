@@ -28,8 +28,17 @@
             <artifactId>phoenix-core</artifactId>
             <version>4.6.0-HBase-1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-convert</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
     </dependencies>
-    
     <build>
         <plugins>
             <plugin>

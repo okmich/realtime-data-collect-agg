@@ -5,7 +5,7 @@
  */
 package com.okmich.hackerday.client.tool.dashboard;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  *
@@ -40,7 +40,7 @@ public interface Handler {
      *
      * @return
      */
-    Map<String, String> getModel();
+    List<String> getSchema();
 
     /**
      *

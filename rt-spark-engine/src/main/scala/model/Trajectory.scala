@@ -30,7 +30,7 @@ case class Trajectory (val plat: Float, val plon: Float, val lat: Float,  val lo
 
 
 	def timeDiffSec(ts1: Long, ts2: Long) : Long = {
-		new Duration(0,0).toStandardSeconds.getSeconds()
+		new Duration(ts1,ts2).toStandardSeconds.getSeconds()
 	}
 
 	def toTuple  = {

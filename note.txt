@@ -19,7 +19,7 @@ kafka-topics.sh --zookeeper 192.168.8.120:2181 --topic raw-gpstrajectory-data-to
 kafka-topics.sh --list --zookeeper 192.168.8.120:2181
 
 # to start a kafka console producer to write to a foo topic
-kafka-console-producer.sh --topic foo --broker-list 192.168.8.120:9092 
+kafka-console-producer.sh --broker-list 192.168.8.120:9092  --topic raw-gpstrajectory-data-topic
 
 
 # to start a kafka consumer to read from foo topic
@@ -27,6 +27,7 @@ kafka-console-consumer.sh --zookeeper 192.168.8.105:2181 --topic foo
 
 # to create the hbase mvment table
 create 'mvment', 'main'
+create 'mvment_by_traj', 'main'
 
 
 #running the client dashboard
@@ -34,32 +35,31 @@ java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.da
 
 
 #running the create dataset simulation tool
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 000 024 "F:\data_dump\Geolife Trajectories 1.3\Data"
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 000 049 "F:\data_dump\Geolife Trajectories 1.3\Data"
 
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 025 049 "F:\data_dump\Geolife Trajectories 1.3\Data"
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 050 099 "F:\data_dump\Geolife Trajectories 1.3\Data"
 
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 050 074 "F:\data_dump\Geolife Trajectories 1.3\Data"
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 100 149 "F:\data_dump\Geolife Trajectories 1.3\Data"
 
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 075 099 "F:\data_dump\Geolife Trajectories 1.3\Data"
-
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 100 124 "F:\data_dump\Geolife Trajectories 1.3\Data"
-
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 125 149 "F:\data_dump\Geolife Trajectories 1.3\Data"
-
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 150 174 "F:\data_dump\Geolife Trajectories 1.3\Data"
-
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 175 181 "F:\data_dump\Geolife Trajectories 1.3\Data"
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.FileMerger "F:\data_dump\Geolife Trajectories 1.3\Data" 150 181 "F:\data_dump\Geolife Trajectories 1.3\Data"
 
 
 #running the create dataset streaming simulation 
-java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.RealTimeDeviceClientSimulator "F:\data_dump\Geolife Trajectories 1.3\Data" 192.168.8.120:9092 foo
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.RealTimeDeviceClientSimulator "F:\data_dump\Geolife Trajectories 1.3\Data" 192.168.8.120:9092 raw-gpstrajectory-data-topic
+
+
+#running the create dataset streaming simulation 
+java -cp target\client-tool-1.0-SNAPSHOT.jar com.okmich.hackerday.client.tool.dashboard.Dashboard "F:\data_dump\Geolife Trajectories 1.3\Data" 192.168.8.120:9092 result-aggregation-topic
+
+#run the spark streaming application
+spark-submit --conf spark.hbase.host=192.168.8.120,hbase.zookeeper.quorum=192.168.8.120,hbase.zookeeper.property.clientPort=2181 --master local[*] --packages org.apache.spark:spark-streaming-kafka_2.10:1.6.1,it.nerdammer.bigdata:spark-hbase-connector_2.10:1.0.3 --exclude-packages org.slf4j:slf4j-api --class Main target/scala-2.10/rt-spark-engine-assembly-1.0.jar raw-gpstrajectory-data-topic result-aggregation-topic 192.168.8.120 192.168.8.120:2181
 
 
 
 #apache phoenix view creation command
-create view "mvment_by_traj" (ROWKEY VARCHAR PRIMARY KEY, "main"."plat" FLOAT, "main"."plon" FLOAT, "main"."lon" FLOAT, "main"."lat" FLOAT, "main"."dist" FLOAT, "main"."pts" BIGINT, "main"."ts" BIGINT, "main"."tdiffs" INTEGER, "main"."trajid" VARCHAR);
+create view "mvment_by_traj" (ROWKEY VARCHAR PRIMARY KEY, "main"."plat" UNSIGNED_FLOAT, "main"."plon" UNSIGNED_FLOAT, "main"."lon" UNSIGNED_FLOAT, "main"."lat" UNSIGNED_FLOAT, "main"."dist" UNSIGNED_DOUBLE, "main"."pts" UNSIGNED_LONG , "main"."ts" UNSIGNED_LONG , "main"."tdiffs" UNSIGNED_LONG, "main"."trajid" VARCHAR);
 
-create view "mvment" (ROWKEY VARCHAR PRIMARY KEY, "main"."trajId" VARCHAR, "main"."lat" FLOAT, "main"."lon" FLOAT, "main"."alt" INTEGER, "main"."ts" BIGINT, "main"."userId" VARCHAR);
+create view "mvment" (ROWKEY VARCHAR PRIMARY KEY, "main"."trajId" VARCHAR, "main"."lat" UNSIGNED_FLOAT, "main"."lon" UNSIGNED_FLOAT, "main"."alt" UNSIGNED_FLOAT, "main"."ts" UNSIGNED_LONG , "main"."userId" VARCHAR);
 
 
 -- trajectories by distance
@@ -67,11 +67,11 @@ select "trajid", sum("dist") distance from "mvment_by_traj" group by "trajid";
 
 
 -- trajectories by duration
-select "trajid", sum("tdiffs") duration from "mvment_by_traj" group by "trajId";
+select "trajid", sum("tdiffs") duration from "mvment_by_traj" group by "trajid";
 
 
 -- user by trajectories
-select "userId", count(distinct "trajId") from "mvment" group by "trajId";
+select "userId", count(distinct "trajId") from "mvment" group by "userId";
 
 -- user by collection period
-select "userId", min("ts") mints, max("ts") maxts from "mvment" group by "trajId";
+select "userId", min("ts") mints, max("ts") maxts from "mvment" group by "userId";

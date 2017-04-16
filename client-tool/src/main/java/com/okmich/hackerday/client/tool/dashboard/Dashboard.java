@@ -7,7 +7,6 @@ package com.okmich.hackerday.client.tool.dashboard;
 
 import static com.okmich.hackerday.client.tool.dashboard.Handler.*;
 import com.okmich.hackerday.client.tool.dashboard.kafka.KafkaMessageConsumer;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,10 +38,10 @@ public final class Dashboard {
     private final KafkaMessageConsumer kafkaMessageConsumer;
 
     Dashboard() {
-        trajByDistanceHandler = new TrajByDistanceHandler(constructSchema("1:< 5km;2:5km ~ 20km;3:20km ~ 100km;4:≥ 100km"));
-        trajByDurationHandler = new TrajByDurationHandler(constructSchema("1:< 1h;2:1h ~ 6h;3:6h ~ 12h;4:≥ 12h"));
-        userByPeriodHandler = new UserByPeriodHandler(constructSchema("1:< 1week;2:1week ~ 1month;3:1month ~ 1year;4:≥1year"));
-        userByTrajHandler = new UserByTrajectoryHandler(constructSchema("1:< 10;2:10 ~ 50;3:50 ~ 100;4:≥ 100"));
+        trajByDistanceHandler = new TrajByDistanceHandler();
+        trajByDurationHandler = new TrajByDurationHandler();
+        userByPeriodHandler = new UserByPeriodHandler();
+        userByTrajHandler = new UserByTrajectoryHandler();
 
         handlerMap = new HashMap<>(4);
         handlerMap.put(TRAJ_DISTANCE_KEY, trajByDistanceHandler);
@@ -83,15 +82,15 @@ public final class Dashboard {
         kafkaMessageConsumer.start();
     }
 
-    private Map<String, String> constructSchema(String msg) {
-        String[] mParts, parts = msg.split(";");
-        Map<String, String> schema = new LinkedHashMap<>(parts.length);
-
-        for (String part : parts) {
-            mParts = part.split(":");
-            schema.put(mParts[0], mParts[1]);
-        }
-        return schema;
-    }
+//    private Map<String, String> constructSchema(String msg) {
+//        String[] mParts, parts = msg.split(";");
+//        Map<String, String> schema = new LinkedHashMap<>(parts.length);
+//
+//        for (String part : parts) {
+//            mParts = part.split(":");
+//            schema.put(mParts[0], mParts[1]);
+//        }
+//        return schema;
+//    }
 
 }

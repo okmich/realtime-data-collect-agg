@@ -62,7 +62,7 @@ object Main {
 	def processRDD(rdd: RDD[String]) : Unit ={
 		//logic begins
 		val readingRDD : RDD[Reading] = rdd.map(createReading(_))
-		//cache rdd
+		//cache rdd for performance
 		readingRDD.cache
 
 		val trajectoryMoveMentRDD : RDD[Trajectory] = readingRDD.mapPartitions{partitionOfRecords => {
@@ -89,7 +89,7 @@ object Main {
 		//save trajectory data to hbase
 		saveTrajectoryToHBase(trajectoryMoveMentRDD)
 		//inform clients
-		KafkaMessageProducer("192.168.8.120:9092","result-aggregation-topic").sendMessage("msg=load")
+		new KafkaMessageProducer("192.168.8.120:9092","result-aggregation-topic").sendMessage("msg=load")
 	}
 
 
@@ -131,7 +131,7 @@ object Main {
 	def createReading(line: String) : Reading = {
 		//val s = "000,20081023025304,39.984702,116.318417,0,492,39744.1201851852,2008-10-23,02:53:04"
 		val parts = line.split(",")
-		Reading(parts(0), parts(1), parts(2).toFloat, parts(3).toFloat, parts(5).toInt, parts(7), parts(8) )
+		Reading(parts(0), parts(1), parts(2).toFloat, parts(3).toFloat, parts(5).toFloat, parts(7), parts(8) )
 	}
 
 
