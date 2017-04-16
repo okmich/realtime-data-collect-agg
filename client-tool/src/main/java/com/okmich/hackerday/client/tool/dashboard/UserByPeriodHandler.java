@@ -7,14 +7,12 @@ package com.okmich.hackerday.client.tool.dashboard;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
 
 /**
  *
@@ -52,16 +50,22 @@ public class UserByPeriodHandler extends AbstractHandler {
     }
 
     private void increasePoints(long mints, long maxts) {
-        Instant date1 = Instant.ofEpochMilli(mints);
-        Instant date2 = Instant.ofEpochMilli(maxts);
 
-        Duration duration = Duration.between(date1, date2).abs();
-        long days = duration.toDays();
-        if (days <= 7) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(mints);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal.setTimeInMillis(maxts);
+
+        Period period = new Period(
+                LocalDate.fromCalendarFields(cal),
+                LocalDate.fromCalendarFields(cal2));
+
+        if (period.getDays() <= 7) {
             increasePointValue(ITEM1);
-        } else if (days > 7 && days <= 30) {
+        } else if (period.getMonths() <= 1) {
             increasePointValue(ITEM2);
-        } else if (days > 30 && days <= 365) {
+        } else if (period.getYears() <= 1) {
             increasePointValue(ITEM3);
         } else {
             increasePointValue(ITEM4);
