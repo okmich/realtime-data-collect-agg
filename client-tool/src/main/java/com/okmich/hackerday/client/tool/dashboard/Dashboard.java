@@ -8,17 +8,15 @@ package com.okmich.hackerday.client.tool.dashboard;
 import static com.okmich.hackerday.client.tool.dashboard.Handler.*;
 import com.okmich.hackerday.client.tool.dashboard.kafka.KafkaMessageConsumer;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JFrame;
+import static com.okmich.hackerday.client.tool.dashboard.ControlParameter.*;
 
 /**
  *
  * @author datadev
  */
 public final class Dashboard {
-
-    private final static String CONSUMER_TOPIC = "result-aggregation-topic";
 
     private final ReportItemPanel trajByDistancePanel;
     private final ReportItemPanel trajByDurationPanel;
@@ -66,10 +64,21 @@ public final class Dashboard {
 
         clientDashboardFrame = new ClientDashboardFrame(panelMap);
 
-        kafkaMessageConsumer = new KafkaMessageConsumer(CONSUMER_TOPIC, handlerMap);
+        kafkaMessageConsumer = new KafkaMessageConsumer(get(KAFKA_BROKER_URL), get(KAFKA_TOPIC), handlerMap);
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
+        if (args.length < 3) {
+            System.err.println("General argument: <kafka_broker_url> <kafka_topic> <phoenix_server_hostname>");
+            System.exit(-1);
+        }
+        set(KAFKA_BROKER_URL, args[0]);
+        set(KAFKA_TOPIC, args[1]);
+        set(PHOENIX_HOST, args[2]);
         new Dashboard().start();
     }
 
@@ -78,19 +87,7 @@ public final class Dashboard {
         java.awt.EventQueue.invokeLater(() -> {
             clientDashboardFrame.setVisible(true);
         });
-        //start kafka consumer
+        //start kafka consumer runs on the main thread
         kafkaMessageConsumer.start();
     }
-
-//    private Map<String, String> constructSchema(String msg) {
-//        String[] mParts, parts = msg.split(";");
-//        Map<String, String> schema = new LinkedHashMap<>(parts.length);
-//
-//        for (String part : parts) {
-//            mParts = part.split(":");
-//            schema.put(mParts[0], mParts[1]);
-//        }
-//        return schema;
-//    }
-
 }

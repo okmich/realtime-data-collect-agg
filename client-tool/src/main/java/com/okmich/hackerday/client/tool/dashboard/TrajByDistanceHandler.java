@@ -33,7 +33,7 @@ public class TrajByDistanceHandler extends AbstractHandler {
     }
 
     @Override
-    public void handle(String msg) {
+    public void handle() {
         try {
             ResultSet rs = fectResultset();
             initData();

@@ -32,9 +32,8 @@ public interface Handler {
 
     /**
      *
-     * @param message
      */
-    void handle(String message);
+    void handle();
 
     /**
      *

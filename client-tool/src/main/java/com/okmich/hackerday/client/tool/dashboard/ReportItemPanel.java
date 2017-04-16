@@ -21,6 +21,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleEdge;
 
 /**
  *
@@ -126,7 +127,7 @@ public final class ReportItemPanel extends JPanel implements ReportItem {
         plot.setLabelGap(0.02);
 
         LegendTitle legend = chart.getLegend();
-        //legend.setPosition(RectangleEdge.RIGHT);
+        legend.setPosition(RectangleEdge.BOTTOM);
         this.chartPanel = new ChartPanel(chart);
         this.chartPanel.addMouseListener(new MouseListenerImpl(this));
 

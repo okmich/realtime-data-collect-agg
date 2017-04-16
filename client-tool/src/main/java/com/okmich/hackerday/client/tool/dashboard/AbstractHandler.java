@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static com.okmich.hackerday.client.tool.dashboard.ControlParameter.*;
 
 /**
  *
@@ -40,7 +41,7 @@ public abstract class AbstractHandler implements Handler {
         this.schema = schema;
         try {
             //connection to phoenix server
-            connection = DriverManager.getConnection("jdbc:phoenix:datadev-box");
+            connection = DriverManager.getConnection("jdbc:phoenix:" + get(PHOENIX_HOST));
             ps = connection.prepareStatement(prepareStm);
         } catch (SQLException ex) {
             Logger.getLogger(AbstractHandler.class.getName()).log(Level.SEVERE, null, ex);

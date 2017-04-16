@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 
 /**
  *
@@ -45,18 +47,18 @@ public class ClientSimulator implements Runnable {
     @Override
     public void run() {
         //read file content
-        List<String> allFileContent;
+        LineIterator lIt;
         try {
             LOG.log(Level.INFO, "Reading the content of file");
-            allFileContent = Files.readAllLines(this.file.toPath());
+            lIt = FileUtils.lineIterator(this.file);
         } catch (IOException ex) {
             Logger.getLogger(ClientSimulator.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
         String line;
         LOG.log(Level.INFO, "Sending file content to kafka topic - {0}", this.topic);
-        for (int i = 0; i < allFileContent.size(); i++) {
-            line = allFileContent.get(i);
+        while (lIt.hasNext()) {
+            line = lIt.nextLine();
             //send message to kafka
             this.kafkaMessageProducer.send(this.topic, line);
             try {

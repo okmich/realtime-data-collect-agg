@@ -29,16 +29,17 @@ public class KafkaMessageConsumer {
 
     private static final Logger LOG = Logger.getLogger(KafkaMessageConsumer.class.getName());
 
-    private Executor executor;
+    private final Executor executor;
 
     /**
      *
+     * @param kafkaBrokerUrl
      * @param topic
      * @param ihandlerMap
      */
-    public KafkaMessageConsumer(String topic, Map<String, Handler> ihandlerMap) {
+    public KafkaMessageConsumer(String kafkaBrokerUrl, String topic, Map<String, Handler> ihandlerMap) {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "192.168.8.120:9092");
+        props.put("bootstrap.servers", kafkaBrokerUrl);
         props.put("group.id", "RealTimeSystemDashboard");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
@@ -68,7 +69,7 @@ public class KafkaMessageConsumer {
                 executor.execute(() -> {
                     handlerMap.keySet().stream().forEach((key) -> {
                         try {
-                            handlerMap.get(key).handle("");
+                            handlerMap.get(key).handle();
                         } catch (Exception ex) {
                             LOG.log(Level.SEVERE, ex.getMessage(), ex);
                         }
